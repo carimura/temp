@@ -30,7 +30,7 @@ We need a Kubernetes service that's going to represent our app (`myapp.yaml`). T
 1.  Create the `myapp` deployment and service:
 
 ```
-kubectl apply -f myapp.yaml
+kubectl apply -f deploy/myapp.yaml
 ```
 
 By default, `myapp` service will route 100% of traffic to the v1 version (i.e. /app/v1). The service is also accessible from `http://localhost:9999`.
@@ -63,9 +63,9 @@ The `update.sh` script can be used to change the traffic split like this:
 
 As you run the commands above, observe how the output changes in the endless loop.
 
-### Tech details
+# Tech details
 
-#### Custom Nginx image
+## Custom Nginx image (`/appimage`)
 
 Nothing too special with this image - we are just copying the Nginx configurations to the image, so we can replace them when `./update.sh` is called.
 
@@ -77,11 +77,11 @@ docker build -t [registry]/[image-name] .
 
 If you make changes to the image, make sure yo update the `image` field in the `myapp.yaml` file as well and eithe re-deploy the app OR delete the pod, so it restarts and pulls the new image automatically.
 
-#### Nginx config
+## Nginx config
 
 ic splitting is done using the `split_clients` module from Nginx. We are defining a variable called `app_url` and then setting the variable either to v1 endpoint or v2 endpoint (e.g. /r/app/v1 or /r/app/v2), based on the set percentage. Once that's set, we are passing the traffic to an upstram server (which is the Fn load balancer) and appending the `app_url` to it, so it routes to specific function version.
 
-#### Update script
+## Update script
 
 Script is doing a quick and dirty way of updating the Nginx configuration - we have 3 different Nginx config files for 3 cases (100% -> v1, 100% -> v2 and 50/50) and script gets the pod where the Nginx is running, replaces the config and reloads the Nginx.
 
