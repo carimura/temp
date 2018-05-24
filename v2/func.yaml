@@ -1,0 +1,5 @@
+name: v2
+version: 0.0.2
+runtime: go
+entrypoint: ./func
+format: json
