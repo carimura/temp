@@ -5,24 +5,34 @@ metadata:
 data:
   nginx.conf: |
     events {
-        worker_connections  4096;  ## Default: 1024
+        worker_connections  4096;
     }
 
-
     http {
-        upstream functions {
-            server pj-fn-api.default;
-            # server pj-fn-api.default/r/app/v2/;
+        # Create the $app_url variable for split testing
+        # The $app_url will have one of values defined, based on the % defined 
+        split_clients "app${remote_addr}${http_user_agent}${date_gmt}"  $app_url {
+            100%     r/app/v1/;
+            *       r/app/v2/;
         }
+
+        # Fn server upstream - this could probably be 
+        # the Fn load balancer here as well
+        upstream fn-server {
+            server pj-fn-api.default;
+        }
+
         server {
             listen 80;
 
             location / {
-                rewrite ^(.*)$  /r/app/$1 break;
-                proxy_redirect off;
-                proxy_set_header Host $http_host;
-                proxy_pass http://functions;
-                # return 301 http://pj-fn-api.default/r/app/v1/;
+                # Pass all calls to the fn-server upstream and
+                # append the $app_url variable that holds the path
+                # to the actual versioned app.
+                proxy_pass http://fn-server/$app_url;
+                proxy_set_header X-Real-IP  $remote_addr;
+                proxy_set_header X-Forwarded-For $remote_addr;
+                proxy_set_header Host $host;
             }
         }
     }
