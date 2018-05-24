@@ -2,6 +2,10 @@
 
 This is a simple demo that demonstrates how to do weight based traffic splitting to different functions/function versions.
 
+# Demo
+
+![nginx-demo](img/nginx-fn-demo.gif)
+
 ## Setup
 
 1.  Deploy Fn using the Helm chart
