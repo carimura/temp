@@ -9,7 +9,7 @@ This is a simple demo that demonstrates how to do weight based traffic splitting
 
     Deploy the Helm chart fo `fn-nginx` namespace and call your release `nginx-fn` (this is important as these values are used in the nginx config)
 
-2.  Deploy the functions (app/v1 and app/v2) in this folder:
+2.  Deploy the functions (app/v1 and app/v2) from the `fn` folder:
 
 ```
 export FN_REGISTRY=[your_repo]
