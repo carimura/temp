@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment
+  namespace: fn-nginx
+  labels:
+    app: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: pj3677/nginx-fn
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 80
+            protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: myapp
+  namespace: fn-nginx
+spec:
+  selector:
+    app: myapp
+  ports:
+  - protocol: TCP
+    port: 9999
+    targetPort: 80
+  type: LoadBalancer
