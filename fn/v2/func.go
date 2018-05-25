@@ -16,7 +16,7 @@ func myHandler(ctx context.Context, in io.Reader, out io.Writer) {
 	msg := struct {
 		Msg string `json:"message"`
 	}{
-		Msg: "hello v2",
+		Msg: "hello NOT NEW ANYMORE  v2",
 	}
 	json.NewEncoder(out).Encode(&msg)
 }
