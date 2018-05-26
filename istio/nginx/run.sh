@@ -24,7 +24,7 @@ echo .
 cp nginx.conf /etc/nginx/nginx.conf
 
 # Test the config, run it and exit if anything fails
-nginx -t && nginx && exit 1
+nginx -t
+nginx
 
-# Tail the /dev/null so the container doesn't exit
 tail -f /dev/null
