@@ -20,7 +20,11 @@ spec:
       containers:
         - name: %APPNAME%
           image: pj3677/simple-proxy
-          args: ["%UPSTREAM%", "%ROUTE%"]
+          env:
+          - name: UPSTREAM
+            value: "%UPSTREAM%"
+          - name: ROUTE
+            value: "%ROUTE%"
           imagePullPolicy: Always
           ports:
           - containerPort: 80

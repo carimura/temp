@@ -1,2 +1,6 @@
 FROM nginx
-COPY nginx.conf /etc/nginx/nginx.conf
+
+COPY run.sh .
+RUN chmod +x run.sh
+COPY nginx.conf.templ .
+ENTRYPOINT [ "./run.sh" ]
