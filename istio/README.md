@@ -70,7 +70,9 @@ Run `curl` in endless loop, so you can see the responses:
 while true; do sleep 1; curl http://[INGRESS_ENDPOINT];done
 ```
 
-3.  Deploy the routing rule to route all requests to V1:
+Edit the routing rule and make sure you rename the destination service name to
+be the same service name you used when deploying the proxies. Deploy the routing
+rule to route all requests to V1:
 
 ```
 kubectl apply -f all-v1.yaml
@@ -78,13 +80,17 @@ kubectl apply -f all-v1.yaml
 
 At this point, all requests should be going to V1.
 
-4.  Try other routing rules:
+#### Try other routing rules:
 
 You can now deploy `all-v2.yaml` or `5050.yaml` (or modify any of these routing
 rules and try them out).
 
 To delete the routing rule(s), run `kubectl get routerule -n fn-istio` and then
 `kubectl delete routerule [rulename] -n fn-istio`.
+
+---
+
+STUFF BELOW IS OLD
 
 ## Deploying the App service (OLD)
 
