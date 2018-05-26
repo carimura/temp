@@ -44,20 +44,22 @@ You will also need the name of the Fn API service that's running in Kubernetes
 ```
 # Generate the v1 proxy (fn api service name would be something like `prefix-fn-api.default`)
 ./deploy.sh myapp v1 r/app/v1 [FN_API_SERVICE_NAME]
-kubectl apply -f [GENERATED_FILE_NAME]
+kubectl apply -f <(istioctl kube-inject -f [GENERATED_FILE_NAME])
 
 # Generate the second version
 ./deploy.sh myapp v2 r/app/v2 [FN_API_SERVICE_NAME]
 
-kubectl apply -f [GENERATED_FILE_NAME]
+kubectl apply -f <(istioctl kube-inject -f [GENERATED_FILE_NAME])
 ```
 
-This will deploy two proxies and a generic Kubernetes service called
-`myapp-service`. Next step is to deploy the ingress, so you can access this
-service from outside of the cluster:
+This will deploy two proxies, a generic Kubernetes service called
+`myapp-service` and an Ingress resource, so you can access this service from
+outside of the cluster.
+
+To get the Ingress IP, run the command below and use the external IP column:
 
 ```
-kubectl apply -f deploy/ing.yaml
+kubectl get svc -n istio-system | grep istio-ingress
 ```
 
 ## Routing traffic
